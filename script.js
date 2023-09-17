@@ -15,7 +15,7 @@ function main() {
     VIDEO.play();
 
     VIDEO.onloadeddata=function () {
-        updateCanvas():
+        updateCanvas();
     }
 
    }).catch(function(err){
