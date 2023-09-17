@@ -4,27 +4,34 @@ let CONTEXT = null;
 let SCALER = 0.6;
 let SIZE = { x: 0, y: 0, width: 0, height: 0 };
 
-function main() {
-  CANVAS = document.getElementById('myCanvas');
-  CONTEXT = CANVAS.getContext('2d');
-
-  let promise = navigator.mediaDevices.getUserMedia({ video: true });
-  promise
-    .then(function (signal) {
-      VIDEO = document.createElement('video');
-      VIDEO.srcObject = signal;
-      VIDEO.play();
-
-      VIDEO.onloadeddata = function () {
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        updateCanvas();
-      };
-    })
-    .catch(function (err) {
+async function main() {
+    CANVAS = document.getElementById('myCanvas');
+    CONTEXT = CANVAS.getContext('2d');
+  
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoDevices = devices.filter(device => device.kind === 'videoinput');
+      
+      if (videoDevices.length > 0) {
+        const rearCamera = videoDevices[videoDevices.length - 1]; // Zakładając, że ostatnie urządzenie to kamera tylna
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: rearCamera.deviceId } });
+        
+        VIDEO = document.createElement('video');
+        VIDEO.srcObject = stream;
+        VIDEO.play();
+  
+        VIDEO.onloadeddata = function () {
+          handleResize();
+          window.addEventListener('resize', handleResize);
+          updateCanvas();
+        };
+      } else {
+        alert('No video devices found.');
+      }
+    } catch (err) {
       alert('Camera error: ' + err);
-    });
-}
+    }
+  }
 
 function handleResize() {
   CANVAS.width = window.innerWidth;
