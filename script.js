@@ -49,7 +49,7 @@ function updateCanvas() {
 
 // Wywołanie funkcji main przy załadowaniu strony
 window.onload = main;
-Ten kod powinien działać, aby wyświetlić obraz z kamery na elemencie canvas w HTML i automatycznie dostosowywać rozmiar canvasa do okna przeglądarki. Teraz możesz dodać kod do odczytywania kodów kreskowych, jeśli jest to część twojego projektu.
+
 
 
 
